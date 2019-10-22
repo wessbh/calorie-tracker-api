@@ -11,7 +11,7 @@ var app = express();
 var db = mysql.createConnection({
     host: 'localhost',
     user:  'root',
-    password: 'root',
+    password: '',
     database: 'calory_tracker'
 });
 
@@ -60,6 +60,7 @@ app.post('/register', function (req,res){
 
     
 });
+
 //login
 app.get('/login', function(req,res){
     username = req.body.username;
@@ -82,6 +83,11 @@ app.get('/login', function(req,res){
             })
         }
     });
+
+});
+
+app.get('/', function(req,res){
+    res.send({'message': 'Hello there !'});
 
 });
 
@@ -109,3 +115,5 @@ function encrypt(text) {
     decrypted = Buffer.concat([decrypted, decipher.final()]);
     return decrypted.toString();
    }
+
+   
