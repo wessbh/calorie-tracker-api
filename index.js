@@ -6,7 +6,7 @@ const iv = crypto.randomBytes(16);
 var mysql = require('mysql');
 var bodyparser = require('body-parser');
 var app = express();
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT;
 
 //connect to database
 var db = mysql.createConnection({
