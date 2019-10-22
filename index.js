@@ -9,10 +9,10 @@ var app = express();
 
 //connect to database
 var db = mysql.createConnection({
-    host: 'localhost',
-    user:  'root',
-    password: '',
-    database: 'calory_tracker'
+    host: 'eu-cdbr-west-02.cleardb.net',
+    user:  'bd26fbcc7f9feb',
+    password: '850a77ec',
+    database: 'heroku_6d8616ef274a737'
 });
 
 app.use(bodyparser.urlencoded({
