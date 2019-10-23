@@ -5,9 +5,14 @@ const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
 var mysql = require('mysql');
 var bodyparser = require('body-parser');
+var morgan = require('morgan');
+var cors = require("cors");
 var app = express();
-var PORT = process.env.PORT;
-
+app.use(cors());
+app.use('*', cors());
+app.use(morgan('dev'));
+var PORT = process.env.PORT || 3000;
+var connection;
 //connect to database
 var db = mysql.createConnection({
     host: 'eu-cdbr-west-02.cleardb.net',
@@ -87,13 +92,13 @@ app.get('/login', function(req,res){
 
 });
 
-app.get('/', function(req,res){
+app.get('*', function(req,res){
     res.send({'message': 'Hello there !'});
 
 });
 
 app.listen(PORT, function() {
-    console.log('app listening on port 3000');
+    console.log('app listening on port '+PORT);
 });
 
 
@@ -116,5 +121,3 @@ function encrypt(text) {
     decrypted = Buffer.concat([decrypted, decipher.final()]);
     return decrypted.toString();
    }
-
-   
