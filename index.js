@@ -20,7 +20,7 @@ calc_BMR(85, 183, 'female', 26, 1.2);
 var db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'root',
     database: 'calory_tracker'
 });
 
