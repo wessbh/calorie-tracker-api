@@ -1,6 +1,7 @@
 var express = require('express');
 const crypto = require('crypto');
 const algorithm = 'aes-256-cbc';
+var passwordHash = require('password-hash');
 const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
 var mysql = require('mysql');
@@ -19,7 +20,7 @@ calc_BMR(85, 183, 'female', 26, 1.2);
 var db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'root',
+    password: '',
     database: 'calory_tracker'
 });
 
@@ -41,7 +42,7 @@ app.post('/register', function (req, res) {
     date = new Date();
     username = req.body.username;
     email = req.body.email;
-    password = req.body.password;
+    var password = encrypt(req.body.password);
     birthday = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1) + '-' + pad(date.getUTCDate());
     height = req.body.height;
     weight = req.body.weight;
@@ -109,7 +110,7 @@ app.post('/login', function (req, res) {
         } else {
             let selctSql = `SELECT * FROM user WHERE username = "${username}"`;
             db.query(selctSql, (error, results) => {
-                if (results[0].password == password) {
+                if (decrypt(password, results[0].password)) {
                     var user = results[0];
                     res.status(200).send(results[0]);
                 } else {
@@ -179,7 +180,7 @@ function calc_BMR (weight, height, gender, age, frequence_activity){
     console.log(final_bmr);
     return final_bmr;
 }
-// this is a test
+
 function calc_BMI(w, h) {
 
     var s;
@@ -217,4 +218,12 @@ function calc_BMI(w, h) {
 
     return final_bmi;
   
+}
+
+function encrypt(password){
+    var hashedPassword = passwordHash.generate(password);
+    return hashedPassword;
+}
+function decrypt(password, hashed_password){
+    return passwordHash.verify(password, hashed_password);
 }
