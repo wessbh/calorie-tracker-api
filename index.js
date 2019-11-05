@@ -11,8 +11,10 @@ var app = express();
 app.use(cors());
 app.use('*', cors());
 app.use(morgan('dev'));
-var PORT = process.env.PORT || 3000;
+var PORT =3000;
 var connection;
+
+calc_BMR(85, 183, 'female', 26, 1.2);
 //connect to database
 var db = mysql.createConnection({
     host: 'localhost',
@@ -24,6 +26,7 @@ var db = mysql.createConnection({
 app.use(bodyparser.urlencoded({
     extended: true
 }));
+
 //connect to database
 db.connect((err) => {
     if (err) {
@@ -73,6 +76,18 @@ app.post('/register', function (req, res) {
 
 });
 
+//Calculate BMR
+app.get('/calculate_bmr', function (req, res) { 
+    var weight = req.body.weight;
+    var height = req.body.height;
+    var age = req.body.age;
+    var gender = req.body.gender;
+    var frequence_activity = req.body.frequence_activity;
+    
+    res.status(200).send({'bmr': calc_BMR(weight, height, gender,age, frequence_activity)});
+
+});
+
 //login
 app.post('/login', function (req, res) {
     username = req.body.username;
@@ -107,11 +122,6 @@ app.get('*', function (req, res) {
 app.listen(PORT, function () {
     console.log('app listening on port ' + PORT);
 });
-
-
-
-
-
 //encrypt and decrypt function for password
 function encrypt(text) {
     let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
@@ -149,4 +159,15 @@ function handleDisconnect() {
             throw err;                                  // server variable configures this)
         }
     });
+}
+
+function calc_BMR (weight, height, gender, age, frequence_activity){    
+    var gender_value = 5;
+    if(gender == "female"){
+        gender_value = 116;
+    }
+    var bmr = (weight * 10) + (6.25 * 185) - (age *5) +gender_value;
+    var final_bmr = bmr * frequence_activity
+    console.log(final_bmr);
+    return final_bmr;
 }
