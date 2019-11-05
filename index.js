@@ -107,7 +107,7 @@ app.post('/login', function (req, res) {
     db.query(researchSql, (error, results) => {
         if (error) throw error;
         if (results[0].idCount == 0) {
-            res.send('wrong username');
+            res.status(400).send('wrong username');
         } else {
             let selctSql = `SELECT * FROM user WHERE username = "${username}"`;
             db.query(selctSql, (error, results) => {
