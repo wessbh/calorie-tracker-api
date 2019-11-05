@@ -171,3 +171,4 @@ function calc_BMR (weight, height, gender, age, frequence_activity){
     console.log(final_bmr);
     return final_bmr;
 }
+// this is a test
