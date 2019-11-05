@@ -172,3 +172,39 @@ function calc_BMR (weight, height, gender, age, frequence_activity){
     return final_bmr;
 }
 // this is a test
+function calc_BMI(w, h) {
+
+    var s;
+
+    hm = h/100;
+    t  = w/(hm*hm);
+    console.log(t);
+
+    if(t>40){
+        s =  'Very severely obese';
+    }
+    if(t<40 && t>35){
+        s =  'Severely obese';
+    }
+    if(t<35 && t>30){
+        s = 'Moderately obese';
+    }
+    if(t<30 && t>25){
+        s = 'Overweight';
+    }
+    if(t<25 && t>18.5){
+        s = 'Normal (healthy weight)';
+    }
+    if(t<18.5 && t>16){
+        s = 'Underweight';
+    }
+    if(t<16 && t>15){
+        s = 'Severely Underweight';
+    }
+    if(t<15){
+        s = 'Very Severely Underweight';
+    }
+
+    return 'Your BMI is ' + t.toFixed(2) + ' ' + s;
+  
+}
