@@ -19,7 +19,7 @@ calc_BMR(85, 183, 'female', 26, 1.2);
 var db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: 'root',
     database: 'calory_tracker'
 });
 
@@ -85,6 +85,14 @@ app.get('/calculate_bmr', function (req, res) {
     var frequence_activity = req.body.frequence_activity;
     
     res.status(200).send({'bmr': calc_BMR(weight, height, gender,age, frequence_activity)});
+
+});
+//Calculate BMI
+app.get('/calculate_bmi', function (req, res) { 
+    var weight = req.body.weight;
+    var height = req.body.height;
+    
+    res.status(200).send(calc_BMI(weight, height));
 
 });
 
@@ -204,7 +212,9 @@ function calc_BMI(w, h) {
     if(t<15){
         s = 'Very Severely Underweight';
     }
+    var output = 'Your BMI is ' + t.toFixed(2) + ' ' + s;
+    var final_bmi = {'bmi': t.toFixed(2), 'message': output}
 
-    return 'Your BMI is ' + t.toFixed(2) + ' ' + s;
+    return final_bmi;
   
 }
