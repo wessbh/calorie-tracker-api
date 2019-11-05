@@ -40,6 +40,7 @@ app.post('/register', function (req, res) {
     var pad = function (num) { return ('00' + num).slice(-2) };
     date = new Date();
     username = req.body.username;
+    gender = req.body.gender;
     email = req.body.email;
     password = req.body.password;
     birthday = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1) + '-' + pad(date.getUTCDate());
@@ -47,7 +48,7 @@ app.post('/register', function (req, res) {
     weight = req.body.weight;
     frequence_activity = req.body.frequence_activity;
 
-    let user = { username: username, email: email, password: password, birthday: birthday, height: height, weight: weight, frequence_activity: frequence_activity };
+    let user = { username: username, gender: gender, email: email, password: password, birthday: birthday, height: height, weight: weight, frequence_activity: frequence_activity };
     let sql = 'INSERT INTO user SET ?'
 
     let researchSql = `SELECT COUNT(*) AS idCount FROM user WHERE username = "${username}"`;
