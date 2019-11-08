@@ -40,16 +40,22 @@ app.post('/register', function (req, res) {
 
     var pad = function (num) { return ('00' + num).slice(-2) };
     date = new Date();
+    var parts = req.body.birthday.split('/');
+    var mydate = new Date(parts[2],parts[1] - 1, parts[0]);
+    new Date()
     username = req.body.username;
     gender = req.body.gender;
     email = req.body.email;
     var password = encrypt(req.body.password);
-    birthday = date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1) + '-' + pad(date.getUTCDate());
+    birthday = mydate.getUTCFullYear() + '-' + pad(mydate.getUTCMonth() + 1) + '-' + pad(mydate.getUTCDate());
     height = req.body.height;
     weight = req.body.weight;
     frequence_activity = req.body.frequence_activity;
+    age = date.getFullYear() - mydate.getFullYear();
+    BMI = calc_BMI(weight,height);
+    BMR = calc_BMR(weight,height,gender,age,frequence_activity);
 
-    let user = { username: username, gender: gender, email: email, password: password, birthday: birthday, height: height, weight: weight, frequence_activity: frequence_activity };
+    let user = { username: username, gender: gender, email: email, password: password, birthday: birthday, height: height, weight: weight, frequence_activity: frequence_activity, BMI: BMI.bmi, BMR: BMR};
     let sql = 'INSERT INTO user SET ?'
 
     let researchSql = `SELECT COUNT(*) AS idCount FROM user WHERE username = "${username}"`;
@@ -71,7 +77,7 @@ app.post('/register', function (req, res) {
                 console.log(result);
             })
         } else {
-            res.send('username already exist')
+            res.status(400).send('username already exist')
         }
     });
 
@@ -117,16 +123,13 @@ app.post('/login', function (req, res) {
                 } else {
                     res.status(400).send("wrong password");
                 }
-
             })
         }
     });
-
 });
 
 app.get('*', function (req, res) {
     res.send({ 'message': 'Hello there !' });
-
 });
 
 app.listen(PORT, function () {
