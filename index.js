@@ -128,7 +128,7 @@ app.post('/login', function (req, res) {
     });
 });
 
-app.get('*', function (req, res) {
+app.get('/', function (req, res) {
     res.send({ 'message': 'Hello there !' });
 });
 
@@ -142,6 +142,15 @@ function encrypt(text) {
     encrypted = Buffer.concat([encrypted, cipher.final()]);
     return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
 }
+
+app.get('/categories',(req,res) => {
+    let sql = `SELECT category_name FROM food_category`;
+    let query = db.query(sql, (err,results) => {
+        if(err) throw err;
+        console.log(results);
+        res.send(results);
+    })
+});
 
 function decrypt(text) {
     let iv = Buffer.from(text.iv, 'hex');
