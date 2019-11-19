@@ -144,7 +144,7 @@ function encrypt(text) {
 }
 
 app.get('/categories',(req,res) => {
-    let sql = `SELECT category_name FROM food_category`;
+    let sql = `SELECT * FROM food_category`;
     let query = db.query(sql, (err,results) => {
         if(err) throw err;
         console.log(results);
